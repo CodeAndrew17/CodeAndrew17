@@ -14,7 +14,7 @@ class SucursalesSeralizers(serializers.ModelSerializer):
 class UsuariosSerializers(serializers.ModelSerializer):
     class Meta:
         model= Usuarios
-        fields='__all__'
+        exclude=['id_empleado']
 
 class EmpleadosSerialzers(serializers.ModelSerializer):
     class Meta:

@@ -75,8 +75,9 @@ class General_eliminar_modificiar(generics.GenericAPIView):
         except self.model.DoesNotExist:
             return Response({"detail": "Objeto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         
-""""
-class EmpleadosUsuarios(generics.GenericAPIView):
+
+
+class CrearEmpleadoUsuarioView(APIView):
     model = Empleados
     serializer_class = EmpleadosSerialzers
 
@@ -92,96 +93,38 @@ class EmpleadosUsuarios(generics.GenericAPIView):
             return Response({'error': str(e)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
     def post(self, request):
-        # Serializar los datos del empleado
-        empleado_serializer = self.serializer_class(data=request.data)
+        # Extraer datos del request
+        empleado_data = request.data.get('empleado')
+        usuario_data = request.data.get('usuario')
+
+        if not empleado_data or not usuario_data:
+            return Response(
+                {'error': 'Se requieren tanto los datos de empleado como de usuario.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validar y crear Empleado
+        empleado_serializer = EmpleadosSerialzers(data=empleado_data)
+
         if empleado_serializer.is_valid():
             empleado = empleado_serializer.save()
-
-            usuario_data = {'id_empleado': empleado.id}
-            
             usuario_serializer = UsuariosSerializers(data=usuario_data)
             if usuario_serializer.is_valid():
-                usuario_serializer.save()
-                return Response({'message': 'Empleado and usuario created successfully'}, status=status.HTTP_201_CREATED)
-            else:
-                return Response(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(empleado_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""
-class RegistrarUsuarios(APIView):
-    model = Empleados
-    serializer_class = EmpleadosSerialzers
+                usuario = usuario_serializer.save(empleado=empleado)  # Relacionamos empleado con usuario
 
-    def get_queryset(self):
-        return self.model.objects.all()
-
-    def get(self, request):
-        try:
-            modelos = self.model.objects.all()
-            model_serializers = self.serializer_class(modelos, many=True)
-            return Response(model_serializers.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-    def post(self, request):
-        usuario_serializer = UsuariosSerializers(data=request.data)
-        if usuario_serializer.is_valid():
-            empleado_serializer = EmpleadosSerialzers(data=request.data)
-            if empleado_serializer.is_valid():
-                empleado = empleado_serializer.save()
-                usuario = usuario_serializer.save(commit=False)
-                usuario.id_empleado = Empleados.objects.order_by('-id').first()
-                usuario.save()
-                return Response({'empleado': empleado_serializer.data, 'usuario': usuario_serializer.data}, status=status.HTTP_201_CREATED)
-            else:
-                return Response(empleado_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-class EmpleadosUsuarios(generics.CreateAPIView):
-    model = Empleados
-    serializer_class = EmpleadosSerialzers
-
-    def get_queryset(self):
-        return self.model.objects.all()
-
-    def get(self, request):
-        try:
-            modelos = self.model.objects.all()
-            model_serializers = self.serializer_class(modelos, many=True)
-            return Response(model_serializers.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-
-    def post(self, request):
-        # Serializar los datos del empleado
-        empleado_serializer = EmpleadosSerialzers(data=request.data)
-        
-        if empleado_serializer.is_valid():
-            # Guardar el empleado
-            empleado = empleado_serializer.save()
-
-            # Crear una copia de los datos del request para el usuario
-            usuario_data = request.data.copy()
-            # Añadir el ID del empleado al diccionario de datos del usuario
-            usuario_data['id_empleado'] =  Empleados.objects.order_by('-id').first()
-
-
-            # Serializar los datos del usuario con la referencia al empleado creado
-            usuario_serializer = UsuariosSerializers(data=usuario_data)
-            
-            if usuario_serializer.is_valid():
-                usuario_serializer.save()
                 return Response(
                     {
-                        'empleado': empleado_serializer.data,
-                        'usuario': usuario_serializer.data
+                        'empleado': EmpleadosSerialzers(empleado).data,
+                        'usuario': UsuariosSerializers(usuario).data
                     },
                     status=status.HTTP_201_CREATED
                 )
             else:
-                # Si hay un error con el usuario, eliminar el empleado creado
-                empleado.delete()
                 return Response(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Si los datos del empleado no son válidos
-        return Response(empleado_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Retornar errores de validación
+            errores = {
+                'empleado': empleado_serializer.errors,
+                'usuario': usuario_serializer.errors if 'usuario_serializer' in locals() else {}
+            }
+            return Response(errores, status=status.HTTP_400_BAD_REQUEST)

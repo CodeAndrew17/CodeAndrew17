@@ -50,7 +50,7 @@ class Empleados(models.Model):
 class Usuarios(models.Model):
 
     class Roles(models.TextChoices):
-        administrador= 'AD',"Adminitrador"
+        administrador= 'AD',"Administrador"
         perito='PR', 'Perito'
         recepcionista='RC','Recepcionista'
         adconvenio='CA','Administardor Convenio'
