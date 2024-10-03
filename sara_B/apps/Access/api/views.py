@@ -5,22 +5,15 @@ from apps.Access.models import Empleados, Usuarios
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 
-"""
-class ConvenioAPIViws(APIView):
-
-    def get(self,request):
-        convenios= Convenios.objects.all()
-        Convenios_serialixers= ConveniosSerializers(convenios,many=True)
-        return Response(Convenios_serialixers.data)
-"""
-
+#Api General para la creaacion y visualizacion de los objetos segun el model Selcionado Dinamicamnete en la URL
 class GeneralCrear_listar(generics.GenericAPIView):
     serializer_class=None
     model=None
-    
+    #Realiza el llamado del  ultimo objeto Creado
     def get_queryset(self):
         return self.model.objects.all()
 
+    #Realia  el listado de todos los objetos Creados en el Model
     def get(self,request):
         try:
             modelos= self.model.objects.all()
@@ -29,26 +22,28 @@ class GeneralCrear_listar(generics.GenericAPIView):
         except Exception as e:
             return Response({'error':str(e)},status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
+    #Realiza la Creacion de un nuevo objetos Segun las validaciones y Model correspondiente 
 
-    def post(self,resquest):
-        modelos=self.serializer_class(data=resquest.data)
+    def post(self,request):
+        modelos=self.serializer_class(data=request.data)
         if modelos.is_valid():
             modelos.save()
             return Response(modelos.data,status=status.HTTP_200_OK)
         return Response(modelos.errors,status=status.HTTP_400_BAD_REQUEST)
         
-
+#Api General para la Actualizacion y eliminacion de objetos Segun el model Selcionado dinamicamente el URl
 class General_eliminar_modificiar(generics.GenericAPIView):
     serializer_class= None
     model= None
 
+
+    # Realiza el llamado y verificacion que la PK sea correcta
     def get_object(self, pk):
-        """Helper method to get the object."""
         try:
             return self.model.objects.get(id=pk)
         except self.model.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+    # Llama al Objetos despues de la Validacion  
     def get(self, resquest,pk):
         try:
             modelos= self.get_object(pk)
@@ -57,16 +52,20 @@ class General_eliminar_modificiar(generics.GenericAPIView):
         except self.model.DoesNotExist:
             raise NotFound(detail="Objeto no encontrado.", code=404)
         except:
-            return Response(self.modelos.errors,status=status.HTTP_400_BAD_REQUEST) 
-        
+            return Response(modelos.errors,status=status.HTTP_400_BAD_REQUEST) 
+
+    # Realiza la revision de los  nuevos datos para el objeto y realiza la actualizacion
     def put(self,request,pk):
-        modelos=self.get_object(pk)
-        model_serializars=self.serializer_class(modelos,data=request.data)
-        if model_serializars.is_valid():
-            model_serializars.save()
-            return Response(model_serializars.data, status=status.HTTP_200_OK)
-        return Response(model_serializars.errors,status=status.HTTP_400_BAD_REQUEST)
-    
+        try:
+            modelos=self.get_object(pk)
+            model_serializars=self.serializer_class(modelos,data=request.data)
+            if model_serializars.is_valid():
+                model_serializars.save()
+                return Response(model_serializars.data, status=status.HTTP_200_OK)
+        except self.model.DoesNotExist:
+            return Response(model_serializars.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    #Realiza la eliminacion del objetos indicado.
     def delete(self,request,pk):
         try:
             modelos= self.get_object(pk)
@@ -77,54 +76,3 @@ class General_eliminar_modificiar(generics.GenericAPIView):
         
 
 
-class CrearEmpleadoUsuarioView(APIView):
-    model = Empleados
-    serializer_class = EmpleadosSerialzers
-
-    def get_queryset(self):
-        return self.model.objects.all()
-
-    def get(self, request):
-        try:
-            modelos = self.model.objects.all()
-            model_serializers = self.serializer_class(modelos, many=True)
-            return Response(model_serializers.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-
-    def post(self, request):
-        # Extraer datos del request
-        empleado_data = request.data.get('empleado')
-        usuario_data = request.data.get('usuario')
-
-        if not empleado_data or not usuario_data:
-            return Response(
-                {'error': 'Se requieren tanto los datos de empleado como de usuario.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # Validar y crear Empleado
-        empleado_serializer = EmpleadosSerialzers(data=empleado_data)
-
-        if empleado_serializer.is_valid():
-            empleado = empleado_serializer.save()
-            usuario_serializer = UsuariosSerializers(data=usuario_data)
-            if usuario_serializer.is_valid():
-                usuario = usuario_serializer.save(empleado=empleado)  # Relacionamos empleado con usuario
-
-                return Response(
-                    {
-                        'empleado': EmpleadosSerialzers(empleado).data,
-                        'usuario': UsuariosSerializers(usuario).data
-                    },
-                    status=status.HTTP_201_CREATED
-                )
-            else:
-                return Response(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            # Retornar errores de validación
-            errores = {
-                'empleado': empleado_serializer.errors,
-                'usuario': usuario_serializer.errors if 'usuario_serializer' in locals() else {}
-            }
-            return Response(errores, status=status.HTTP_400_BAD_REQUEST)

@@ -39,7 +39,7 @@ class Sucursales(models.Model):
 class Empleados(models.Model):
     nombres= models.CharField(max_length=100, error_messages=Errores  )
     apellidos=models.CharField(max_length=100)
-    cedula= models.IntegerField(unique=True,error_messages=Errores,null=False)
+    cedula= models.BigIntegerField(unique=True,error_messages=Errores,null=False)
     correo= models.EmailField(max_length=50,unique=True,error_messages=Errores)
     estado= models.CharField(max_length=2,choices=Estado.choices, default=Estado.ACTIVO)
     id_sucursal= models.ForeignKey(Sucursales, on_delete= models.CASCADE, null=False)
