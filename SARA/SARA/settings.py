@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accesso',
+    'tipo_servicio',
+    'django_mysql',
 ]
 
 MIDDLEWARE = [
@@ -76,9 +79,9 @@ WSGI_APPLICATION = 'SARA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'modelo_usuario',
+        'NAME': 'tipo_servicio',
         'USER':'root',
-        'PASSWORD':'12345678',
+        'PASSWORD':'user2024bananin',
         'HOST':'127.0.0.1',
         'PUERTO':"3306"
     }
