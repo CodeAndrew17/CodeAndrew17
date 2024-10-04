@@ -1,10 +1,10 @@
 from rest_framework import serializers,generics
-from apps.Access.models import Convenios,Sucursales,Empleados,Usuarios
+from apps.Access.models import Convenio,Sucursal,Empleado,Usuario
 from .Validaciones import logitud_minima,validaciones_positive
 
-class ConveniosSerializers(serializers.ModelSerializer):
+class ConvenioSerializers(serializers.ModelSerializer):
     class Meta:
-        model=Convenios
+        model=Convenio
         fields= '__all__'
 
     def validate_telefono(self, value):
@@ -13,21 +13,20 @@ class ConveniosSerializers(serializers.ModelSerializer):
     def validate_nit(self, value):
         return logitud_minima(value)
 
-class SucursalesSeralizers(serializers.ModelSerializer):
+class SucursalSeralizers(serializers.ModelSerializer):
     class Meta:
-        model=Sucursales
+        model=Sucursal
         fields= '__all__'
 
-class UsuariosSerializers(serializers.ModelSerializer):
+class UsuarioSerializers(serializers.ModelSerializer):
     class Meta:
-        model= Usuarios
+        model= Usuario
         fields= '__all__'
     
     
-
-class EmpleadosSerialzers(serializers.ModelSerializer):
+class EmpleadoSerialzers(serializers.ModelSerializer):
     class Meta:
-        model=Empleados
+        model=Empleado
         fields='__all__'
 
 

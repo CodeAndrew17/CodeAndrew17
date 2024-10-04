@@ -12,7 +12,7 @@ Errores={'unique': 'Este nombre de usuario  en uso.',
 
         }
 
-class Convenios(models.Model):
+class Convenio(models.Model):
     nombre = models.CharField(max_length=100, unique=True,error_messages=Errores)
     nit = models.CharField(max_length=100, unique=True, null=False,error_messages=Errores)
     telefono = models.BigIntegerField(error_messages=Errores)
@@ -22,13 +22,13 @@ class Convenios(models.Model):
     def __str__(self):
         return self.nombre
 
-class Sucursales(models.Model):
+class Sucursal(models.Model):
     nombre=models.CharField(max_length=100,error_messages=Errores)
     ciudad=models.CharField(max_length=100,error_messages=Errores)
     direccion= models.CharField(max_length=100,error_messages=Errores)
     telefono = models.BigIntegerField(error_messages=Errores)
     estado= models.CharField(max_length=2,choices=Estado.choices, default=Estado.ACTIVO)
-    convenio= models.ForeignKey(Convenios, on_delete=models.CASCADE,null=False)
+    convenio= models.ForeignKey(Convenio, on_delete=models.CASCADE,null=False)
 
     class Meta:
         ordering= ['nombre']
@@ -36,18 +36,18 @@ class Sucursales(models.Model):
     def __str__(self):
         return self.nombre
 
-class Empleados(models.Model):
+class Empleado(models.Model):
     nombres= models.CharField(max_length=100, error_messages=Errores  )
     apellidos=models.CharField(max_length=100)
     cedula= models.BigIntegerField(unique=True,error_messages=Errores,null=False)
     correo= models.EmailField(max_length=50,unique=True,error_messages=Errores)
     estado= models.CharField(max_length=2,choices=Estado.choices, default=Estado.ACTIVO)
-    id_sucursal= models.ForeignKey(Sucursales, on_delete= models.CASCADE, null=False)
+    id_sucursal= models.ForeignKey(Sucursal, on_delete= models.CASCADE, null=False)
 
     def __str__ (self):
         return self.nombres
 
-class Usuarios(models.Model):
+class Usuario(models.Model):
 
     class Roles(models.TextChoices):
         administrador= 'AD',"Administrador"
@@ -60,12 +60,12 @@ class Usuarios(models.Model):
     contraseña= models.CharField(max_length=150)
     rol= models.CharField(max_length=2,choices=Roles.choices)
     estado=models.CharField(max_length=2,choices=Estado.choices,default=Estado.ACTIVO)
-    id_empleado= models.ForeignKey(Empleados, on_delete=models.CASCADE)
+    id_empleado= models.ForeignKey(Empleado, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):
         if not self.pk: 
             self.contraseña = make_password(self.contraseña)
-        super(Usuarios, self).save(*args, **kwargs)
+        super(Usuario, self).save(*args, **kwargs)
 
     def Verificar_contraseña(self,contarseña_plana):
         return check_password(contarseña_plana,self.contraseña)

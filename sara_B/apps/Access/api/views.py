@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework import generics,status
-from apps.Access.api.serializers import EmpleadosSerialzers,UsuariosSerializers
-from apps.Access.models import Empleados, Usuarios
+from apps.Access.api.serializers import EmpleadoSerialzers,UsuarioSerializers
+from apps.Access.models import Empleado, Usuario
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 
 #Api General para la creaacion y visualizacion de los objetos segun el model Selcionado Dinamicamnete en la URL
-class GeneralCrear_listar(generics.GenericAPIView):
+class SEF_POST_General(generics.GenericAPIView):
     serializer_class=None
     model=None
     #Realiza el llamado del  ultimo objeto Creado
@@ -32,7 +32,7 @@ class GeneralCrear_listar(generics.GenericAPIView):
         return Response(modelos.errors,status=status.HTTP_400_BAD_REQUEST)
         
 #Api General para la Actualizacion y eliminacion de objetos Segun el model Selcionado dinamicamente el URl
-class General_eliminar_modificiar(generics.GenericAPIView):
+class PUT_DELETE_General(generics.GenericAPIView):
     serializer_class= None
     model= None
 

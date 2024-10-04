@@ -1,9 +1,9 @@
 from django.contrib import admin
-from apps.Access.models import Convenios,Sucursales,Empleados,Usuarios
+from apps.Access.models import Convenio,Sucursal,Empleado,Usuario
 
 
-admin.site.register(Convenios)
-admin.site.register(Sucursales)
-admin.site.register(Empleados)
-admin.site.register(Usuarios)
+admin.site.register(Convenio)
+admin.site.register(Sucursal)
+admin.site.register(Empleado)
+admin.site.register(Usuario)
 
