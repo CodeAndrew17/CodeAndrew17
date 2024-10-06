@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.hashers import make_password,check_password
 
 class Estado(models.TextChoices):
@@ -47,8 +48,27 @@ class Empleado(models.Model):
     def __str__ (self):
         return self.nombres
 
-class Usuario(models.Model):
+class UsuarioManager(BaseUserManager):
+    def create_user(self, usuario, password=None, **extra_fields):
+        if not usuario:
+            raise ValueError("El nombre de usuario es obligatorio")
+        user = self.model(usuario__usuario=usuario, **extra_fields)
+        user.save(using=self._db)
+        return user
 
+    def create_superuser(self, usuario, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser debe tener is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser debe tener is_superuser=True.')
+
+        return self.create_user(usuario, password, **extra_fields)
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
+    
     class Roles(models.TextChoices):
         administrador= 'AD',"Administrador"
         perito='PR', 'Perito'
@@ -56,19 +76,29 @@ class Usuario(models.Model):
         adconvenio='CA','Administardor Convenio'
         convenioc='CC','Consultor Convenio'
 
-    usuario=models.CharField(max_length=100,unique=True,error_messages=Errores)
-    contraseña= models.CharField(max_length=150)
-    rol= models.CharField(max_length=2,choices=Roles.choices)
-    estado=models.CharField(max_length=2,choices=Estado.choices,default=Estado.ACTIVO)
-    id_empleado= models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    
+    usuario = models.CharField(max_length=100, unique=True)
+    password= models.CharField(max_length=150)
+    rol = models.CharField(max_length=2, choices=Roles.choices)
+    estado = models.CharField(max_length=2, choices=Estado.choices, default=Estado.ACTIVO)
+    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+    last_login = models.DateTimeField(null=True, blank=True)  # Último in
+    objects = UsuarioManager()
+
+    USERNAME_FIELD = 'usuario'
+    REQUIRED_FIELDS = []
+
     def save(self, *args, **kwargs):
         if not self.pk: 
-            self.contraseña = make_password(self.contraseña)
+            self.password = make_password(self.password)
         super(Usuario, self).save(*args, **kwargs)
 
-    def Verificar_contraseña(self,contarseña_plana):
-        return check_password(contarseña_plana,self.contraseña)
+    def Verificar_contraseña(self, contarseña_plana):
+        return check_password(contarseña_plana, self.password)
 
     def __str__(self):
         return self.usuario
+

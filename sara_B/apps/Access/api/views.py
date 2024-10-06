@@ -4,6 +4,9 @@ from apps.Access.api.serializers import EmpleadoSerialzers,UsuarioSerializers
 from apps.Access.models import Empleado, Usuario
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework.authtoken.models import Token
+from django.shortcuts import get_object_or_404
+
 
 #Api General para la creaacion y visualizacion de los objetos segun el model Selcionado Dinamicamnete en la URL
 class SEF_POST_General(generics.GenericAPIView):
@@ -24,12 +27,17 @@ class SEF_POST_General(generics.GenericAPIView):
 
     #Realiza la Creacion de un nuevo objetos Segun las validaciones y Model correspondiente 
 
-    def post(self,request):
-        modelos=self.serializer_class(data=request.data)
-        if modelos.is_valid():
-            modelos.save()
-            return Response(modelos.data,status=status.HTTP_200_OK)
-        return Response(modelos.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+        serializers = self.serializer_class(data=request.data)
+        if serializers.is_valid():
+            objeto = serializers.save()
+            if isinstance(objeto, Usuario):
+                token, created = Token.objects.get_or_create(user=objeto)
+                return Response({'token': token.key, **serializers.data}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
 #Api General para la Actualizacion y eliminacion de objetos Segun el model Selcionado dinamicamente el URl
 class PUT_DELETE_General(generics.GenericAPIView):
@@ -74,5 +82,33 @@ class PUT_DELETE_General(generics.GenericAPIView):
         except self.model.DoesNotExist:
             return Response({"detail": "Objeto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         
+class CreateUser(APIView):
+    model = Usuario
+    serializer_class = UsuarioSerializers
 
+    def get(self, request):
+        usuario = self.model.objects.all()
+        serializers = self.serializer_class(usuario, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        serializers = self.serializer_class(data=request.data)
+        if serializers.is_valid():
+            objet = serializers.save()
+            if isinstance(objet, Usuario):
+                token, created = Token.objects.get_or_create(user=objet)
+                return Response({'token': token.key, **serializers.data}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class login(APIView):
+
+    def post(self,request):
+        user=get_object_or_404(Usuario,usuario=request.data['usuario'])
+
+        if not user.Verificar_contraseña(request.data['password']):
+            return Response({'error':'invalid password '})
+        token, created= Token.objects.get_or_create(user=user)
+        serialiizers= UsuarioSerializers(instance=user)
+        return Response({'token':token.key,'usuario':serialiizers.data}, status.HTTP_200_OK)

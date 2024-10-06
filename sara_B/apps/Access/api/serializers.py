@@ -21,7 +21,7 @@ class SucursalSeralizers(serializers.ModelSerializer):
 class UsuarioSerializers(serializers.ModelSerializer):
     class Meta:
         model= Usuario
-        fields= '__all__'
+        exclude=['is_active','is_staff','is_superuser','last_login']
     
     
 class EmpleadoSerialzers(serializers.ModelSerializer):
