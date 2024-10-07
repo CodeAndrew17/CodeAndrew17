@@ -23,6 +23,7 @@ class UsuarioSerializers(serializers.ModelSerializer):
     class Meta:
         model= Usuario
         exclude=['is_active','is_staff','is_superuser','last_login']
+        
     def validate_usuario(self, value):
         if logitud_minima(value):
             return validate_text(value)

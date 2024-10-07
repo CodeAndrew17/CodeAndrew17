@@ -1,4 +1,4 @@
 # Ignorar el entorno virtual llamado "sara"
 ZARA/
 
-**/migrations/
+/migrations/
