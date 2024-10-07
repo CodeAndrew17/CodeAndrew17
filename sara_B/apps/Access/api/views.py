@@ -6,12 +6,21 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.authentication import TokenAuthentication
+from .Permisos import RolePermission
+from rest_framework.permissions import IsAuthenticated
 
 
 #Api General para la creaacion y visualizacion de los objetos segun el model Selcionado Dinamicamnete en la URL
 class SEF_POST_General(generics.GenericAPIView):
     serializer_class=None
     model=None
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, RolePermission]
+    allowed_roles = ['AD','CA'] 
+    """
     #Realiza el llamado del  ultimo objeto Creado
     def get_queryset(self):
         return self.model.objects.all()
@@ -26,7 +35,6 @@ class SEF_POST_General(generics.GenericAPIView):
             return Response({'error':str(e)},status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
     #Realiza la Creacion de un nuevo objetos Segun las validaciones y Model correspondiente 
-
 
     def post(self, request):
         serializers = self.serializer_class(data=request.data)
@@ -43,7 +51,11 @@ class SEF_POST_General(generics.GenericAPIView):
 class PUT_DELETE_General(generics.GenericAPIView):
     serializer_class= None
     model= None
-
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, RolePermission]
+    allowed_roles = ['AD','CA'] 
+    """
 
     # Realiza el llamado y verificacion que la PK sea correcta
     def get_object(self, pk):
@@ -83,6 +95,11 @@ class PUT_DELETE_General(generics.GenericAPIView):
             return Response({"detail": "Objeto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         
 class CreateUser(APIView):
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, RolePermission]
+    allowed_roles = ['AD','CA'] 
+    """
     model = Usuario
     serializer_class = UsuarioSerializers
 
