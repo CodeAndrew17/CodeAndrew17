@@ -15,5 +15,7 @@ urlpatterns=[
 
     path('usuario_api/',CreateUser.as_view()),
     path('usuario_api/<int:pk>',PUT_DELETE_General.as_view(model=Usuario,serializer_class=UsuarioSerializers)),
-    path('login7',login.as_view(),)
+    path('login7',login.as_view()),
+
+  
 ]

@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
-from rest_framework import generics,status
-from apps.Access.api.serializers import EmpleadoSerialzers,UsuarioSerializers
-from apps.Access.models import Empleado, Usuario
+from django.contrib.auth.models import Group
+from rest_framework import generics,status,a
+from apps.Access.api.serializers import UsuarioSerializers
+from apps.Access.models import Usuario
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.authentication import TokenAuthentication
 from .Permisos import RolePermission
 from rest_framework.permissions import IsAuthenticated
@@ -56,7 +56,6 @@ class PUT_DELETE_General(generics.GenericAPIView):
     permission_classes = [IsAuthenticated, RolePermission]
     allowed_roles = ['AD','CA'] 
     """
-
     # Realiza el llamado y verificacion que la PK sea correcta
     def get_object(self, pk):
         try:

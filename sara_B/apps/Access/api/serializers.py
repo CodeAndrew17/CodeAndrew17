@@ -1,6 +1,9 @@
 from rest_framework import serializers,generics
 from apps.Access.models import Convenio,Sucursal,Empleado,Usuario
 from .Validaciones import logitud_minima,validate_positive,validate_number,validate_text
+from django.contrib.auth.models import Group,Permission
+
+
 
 class ConvenioSerializers(serializers.ModelSerializer):
     class Meta:

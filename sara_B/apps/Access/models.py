@@ -52,7 +52,7 @@ class UsuarioManager(BaseUserManager):
     def create_user(self, usuario, password=None, **extra_fields):
         if not usuario:
             raise ValueError("El nombre de usuario es obligatorio")
-        user = self.model(usuario__usuario=usuario, **extra_fields)
+        user = self.model(usuario=usuario, **extra_fields)
         user.save(using=self._db)
         return user
 
