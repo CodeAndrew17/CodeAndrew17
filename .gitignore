@@ -1,5 +1,5 @@
 # Ignorar el entorno virtual llamado "sara"
 ZARA/
 
-*/migrations/
+migrations/
 apps/Access/migrations/
