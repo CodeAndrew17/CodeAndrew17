@@ -45,6 +45,7 @@ APPS_EXTERNA=[
 
 LOCAL_APP=[
     'apps.Access',
+    'apps.Solicitudes',
 ]
 
 INSTALLED_APPS=INSTALLED_APPS + LOCAL_APP + APPS_EXTERNA
