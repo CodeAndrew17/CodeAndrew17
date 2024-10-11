@@ -48,6 +48,12 @@ class Empleado(models.Model):
     def __str__ (self):
         return self.nombres
 
+"""
+linea de Comando Que relaixa el remplazo de una model por Defecto de Django "User" por 
+model personalida "Usuario", mediante la BaseUserManager modifica el model User  nuestro gusto
+
+"""
+
 class UsuarioManager(BaseUserManager):
     def create_user(self, usuario, password=None, **extra_fields):
         if not usuario:
@@ -66,6 +72,12 @@ class UsuarioManager(BaseUserManager):
             raise ValueError('Superuser debe tener is_superuser=True.')
 
         return self.create_user(usuario, password, **extra_fields)
+
+
+"""
+Con las heredan las clases para poder hacer el cambio de manera precisa, Se necesitas los mismos campos por defecto del moel user 
+y se agregan los campos Personalizados 
+"""
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     

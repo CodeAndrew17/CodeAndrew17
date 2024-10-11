@@ -10,8 +10,9 @@ if not re.fullmatch(pattern, data):
 raise ValidationError("El número de teléfono no es válido")
     return data
 
-"""
+
 r'^\+?\d{1,9}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$'
+"""
 
 def validate_positive(value):
     if value <= 0:

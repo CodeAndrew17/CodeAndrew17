@@ -9,7 +9,7 @@ class ConvenioSerializers(serializers.ModelSerializer):
     class Meta:
         model=Convenio
         fields= '__all__'
-
+    # Funciones que hacen validacion de Cada campo 
     def validate_telefono(self, value):
         return validate_positive(value)
 

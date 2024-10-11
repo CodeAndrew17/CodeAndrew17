@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from django.contrib.auth.models import Group
 from rest_framework import generics,status
 from apps.Access.api.serializers import UsuarioSerializers
 from apps.Access.models import Usuario
@@ -93,7 +92,8 @@ class PUT_DELETE_General(generics.GenericAPIView):
             return Response({"detail": "Eliminado"}, status=status.HTTP_204_NO_CONTENT)
         except self.model.DoesNotExist:
             return Response({"detail": "Objeto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
-        
+
+#Clase para realiza la Creacion del usuarios con la asignacion de toekn para verificaicon      
 class CreateUser(APIView):
     """
     authentication_classes = [TokenAuthentication]
@@ -119,6 +119,7 @@ class CreateUser(APIView):
                 return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# clase que hace la verificacion de Credenciales y trae el token del usuario correspodiente 
 class login(APIView):
 
     def post(self,request):

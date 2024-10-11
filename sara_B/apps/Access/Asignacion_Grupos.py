@@ -17,25 +17,25 @@ grupo.permissions.add(permiso_agregar, permiso_editar
 
 """
     
-
+# Al momneto de la Creacion del usuarios se le asigana el Grupo correspodiente al rol 
 @receiver(post_save, sender=Usuario)
 def AgregarGrupo(sender,instance,created, **karkwargs):
     if created:
         match instance.rol:
             case 'AD': #administrador
-                grupo = Group.objects.get(name='Administrador')  # Obtiene el grupo
+                grupo = Group.objects.get(name='Administrador')  
                 instance.groups.add(grupo)  
             case 'PR': #perito
-                grupo = Group.objects.get(name='Perito')  # Obtiene el grupo
+                grupo = Group.objects.get(name='Perito')  
                 instance.groups.add(grupo) 
             case 'RC':#recepcionista
-                grupo = Group.objects.get(name='Recepcionista')  # Obtiene el grupo
+                grupo = Group.objects.get(name='Recepcionista') 
                 instance.groups.add(grupo)  
             case 'CA':#Administardor Convenio
-                grupo = Group.objects.get(name='AdministradorConvenio')  # Obtiene el grupo
+                grupo = Group.objects.get(name='AdministradorConvenio')  
                 instance.groups.add(grupo)  
             case 'CC':#Consultor Convenio
-                grupo = Group.objects.get(name='ConsultorConvenio')  # Obtiene el grupo
+                grupo = Group.objects.get(name='ConsultorConvenio') 
                 instance.groups.add(grupo)  
 
 
