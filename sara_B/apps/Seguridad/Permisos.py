@@ -1,12 +1,13 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.exceptions import PermissionDenied
-from functools import wraps
 
 class RolePermission(BasePermission):
+    message= "No tienes permisos para Esta Accion"
 
     def has_permission(self, request, view):
         # Verificar que el usuario esté autenticado
         if not request.user.is_authenticated:
+            self.message = "Debes estar Autenticado para Esta Accion"
             return False
         allowed_roles = getattr(view, 'allowed_roles', [])
         return request.user.rol in allowed_roles

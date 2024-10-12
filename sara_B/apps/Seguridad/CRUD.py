@@ -1,0 +1,96 @@
+#Api General para la creaacion y visualizacion de los objetos segun el model Selcionado Dinamicamnete en la URL
+from rest_framework import generics,status
+from rest_framework.response import Response
+from apps.Seguridad.Permisos import RolePermission
+from rest_framework.permissions import IsAuthenticated 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.exceptions import NotFound
+from django.shortcuts import get_object_or_404
+
+
+
+class GetGeneral(generics.GenericAPIView):
+    serializer_class=None
+    model=None
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, RolePermission]
+    allowed_roles = ['AD','PR','RC','CA','CC'] 
+    """
+    #Realiza el llamado del  ultimo objeto Creado
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    #Realia  el listado de todos los objetos Creados en el Model
+    def get(self,request):
+        try:
+            modelos= self.model.objects.all()
+            model_serializers=self.serializer_class(modelos,many=True)
+            return Response(model_serializers.data,status=status.HTTP_200_OK )
+        except Exception as e:
+            return Response({'error':str(e)},status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+class PostGeneral(generics.GenericAPIView):
+    serializer_class=None
+    model= None
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, RolePermission]
+    allowed_roles = ['AD','CA'] # Roles Administrativos
+    """
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    def post(self, request):
+        serializers = self.serializer_class(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+#Api General para la Actualizacion y eliminacion de objetos Segun el model Selcionado dinamicamente el URl
+class PUT_DELETE_General(generics.GenericAPIView):
+    serializer_class= None
+    model= None
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, RolePermission]
+    allowed_roles = ['AD','CA'] 
+    """
+    # Realiza el llamado y verificacion que la PK sea correcta
+    def get_object(self, pk):
+        try:
+            return self.model.objects.get(id=pk)
+        except self.model.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    # Llama al Objetos despues de la Validacion  
+    def get(self, resquest,pk):
+        try:
+            modelos= self.get_object(pk)
+            model_serializers=self.serializer_class(modelos)
+            return Response(model_serializers.data,status=status.HTTP_200_OK )
+        except self.model.DoesNotExist:
+            raise NotFound(detail="Objeto no encontrado.", code=404)
+        except:
+            return Response(modelos.errors,status=status.HTTP_400_BAD_REQUEST) 
+
+    # Realiza la revision de los  nuevos datos para el objeto y realiza la actualizacion
+    def put(self,request,pk):
+        try:
+            modelos=self.get_object(pk)
+            model_serializars=self.serializer_class(modelos,data=request.data)
+            if model_serializars.is_valid():
+                model_serializars.save()
+                return Response(model_serializars.data, status=status.HTTP_200_OK)
+        except self.model.DoesNotExist:
+            return Response(model_serializars.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    #Realiza la eliminacion del objetos indicado.
+    def delete(self,request,pk):
+        try:
+            modelos= self.get_object(pk)
+            modelos.delete()
+            return Response({"detail": "Eliminado"}, status=status.HTTP_204_NO_CONTENT)
+        except self.model.DoesNotExist:
+            return Response({"detail": "Objeto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
