@@ -36,3 +36,9 @@ class EmpleadoSerialzers(serializers.ModelSerializer):
         fields='__all__'
 
 
+class RestablecerPasswordSerializers(serializers.Serializer):
+    correo = serializers.EmailField(max_length=100)
+    class Meta:
+        fields= ['correo']
+
+        

@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
-from rest_framework import status
-from apps.Access.api.serializers import UsuarioSerializers
-from apps.Access.models import Usuario
+from rest_framework import status,generics
+from apps.Access.api.serializers import UsuarioSerializers,RestablecerPasswordSerializers
+from apps.Access.models import Usuario,Empleado
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
 from ...Seguridad.Permisos import RolePermission
@@ -41,10 +42,36 @@ class CreateUser(APIView):
 class login(APIView):
 
     def post(self,request):
-        user=get_object_or_404(Usuario,usuario=request.data['usuario'])
 
-        if not user.Verificar_contraseña(request.data['password']):
-            return Response({'error':'invalid password '})
-        token, created= Token.objects.get_or_create(user=user)
-        serialiizers= UsuarioSerializers(instance=user)
-        return Response({'token':token.key,'usuario':serialiizers.data}, status.HTTP_200_OK)
+        usuario = request.data.get('usuario')
+        password = request.data.get('password')
+
+        if not usuario or not password:
+            return Response({'error':'usuario y contarseña Requeridos'})
+        
+        user=get_object_or_404(Usuario,usuario=request.data['usuario'])
+        
+        if user.estado == 'AC':
+            if not user.Verificar_contraseña(request.data['password']):
+                return Response({'error':'Contraseña Erronea'})
+            token, created= Token.objects.get_or_create(user=user)
+            serialiizers= UsuarioSerializers(instance=user)
+            return Response({'token':token.key,'usuario':serialiizers.data['usuario']}, status.HTTP_200_OK)
+        else:
+            return Response({'error' :'Usuario inactivo. Contactar con el administrador de SARA'}, status=status.HTTP_403_FORBIDDEN)
+
+
+class RestablecerPassword(generics.GenericAPIView):
+    serializer_class = RestablecerPasswordSerializers
+
+    def post(self,request):
+        serializer = self.serializer_class(data= request.data)
+        if serializer.is_valid():
+            correo_empleado= Empleado.objects.filter(correo=correo_empleado).exists()
+            if correo_empleado:
+                pass
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+        

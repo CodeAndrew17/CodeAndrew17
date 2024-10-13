@@ -11,10 +11,17 @@ class EstadosSolicitud(models.TextChoices):
 
 
 class Cliente(models.Model):
+
+    class TiposDocumentos(models.TextChoices):
+        CEDULA= 'CC','Cedula'
+        NIT = 'NI', 'NIT'
+        CEDULAEXT = 'CT', 'Cedula Extrangerida'
+        
     primer_nombre= models.CharField(max_length=100)
     segundo_nombre=models.CharField(max_length=100)
     primer_apellido= models.CharField(max_length=100)
     segundo_apellido= models.CharField(max_length=100)
+    tipo_documento = models.CharField(max_length=2, choices=TiposDocumentos.choices, default=TiposDocumentos.CEDULA)
     documento = models.CharField(max_length=20)
     telefono = models.BigIntegerField()
     direccion = models.CharField (max_length=50)

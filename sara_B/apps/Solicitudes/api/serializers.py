@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.Solicitudes.models import Solicitud, Empleado, CategoriaServicio
+from apps.Solicitudes.models import Solicitud, Cliente, CategoriaServicio
 
 
 class SolicitudSerializers(serializers.ModelSerializer):
@@ -7,9 +7,9 @@ class SolicitudSerializers(serializers.ModelSerializer):
         model = Solicitud
         fields = '__all__'
 
-class EmpleadoSerializers(serializers.ModelSerializer):
+class ClienteSerializers(serializers.ModelSerializer):
     class Meta:
-        model = Empleado
+        model = Cliente
         fields = '__all__'
 
 class CategoriaServicioSerializers(serializers.ModelSerializer):

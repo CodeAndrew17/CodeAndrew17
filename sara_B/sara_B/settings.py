@@ -137,3 +137,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'Access.Usuario'
+
+#Configuracion de Correo Del projecto
+
+DEFAULT_FROM_EMAIL = 'tosaraweb@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = DEFAULT_FROM_EMAIL 
+EMAIL_HOST_PASSWORD = 's e r o j b e q p w i k o b a q '
