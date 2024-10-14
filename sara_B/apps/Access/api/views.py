@@ -50,13 +50,13 @@ class login(APIView):
         password = request.data.get('password')
 
         if not usuario or not password:
-            return Response({'error':'usuario y contarseña Requeridos'})
+            return Response({'error':'usuario y contarseña Requeridos'}, status=status.HTTP_400_BAD_REQUEST)
         
         user=get_object_or_404(Usuario,usuario=request.data['usuario'])
         
         if user.estado == 'AC':
             if not user.Verificar_contraseña(request.data['password']):
-                return Response({'error':'Contraseña Erronea'})
+                return Response({'error':'Contraseña Erronea'}, status=status.HTTP_401_UNAUTHORIZED)
             token, created= Token.objects.get_or_create(user=user)
             serialiizers= UsuarioSerializers(instance=user)
             return Response({'token':token.key,'usuario':serialiizers.data['usuario']}, status.HTTP_200_OK)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 APPS_EXTERNA=[
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders'
 ]
 
 LOCAL_APP=[
@@ -58,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'sara_B.urls'
@@ -90,7 +93,7 @@ DATABASES = {
         'NAME': 'sara_b',
         'USER':'root',
         'PASSWORD':'12345678',
-        'HOTS':'127.0.0.1',
+        'HOST':'127.0.0.1',
         'PORT':'3306',
     }
 }
@@ -147,3 +150,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = DEFAULT_FROM_EMAIL 
 EMAIL_HOST_PASSWORD = 's e r o j b e q p w i k o b a q '
+
+
+#Servidores Permitodos para hacer Peticiones
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]

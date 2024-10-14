@@ -1,0 +1,5 @@
+#Permite la comunicación entres Servidores
+pip install django-cors-headers
+
+#permite la creación de Apis HTTP
+pip install Django Rest Framwork
