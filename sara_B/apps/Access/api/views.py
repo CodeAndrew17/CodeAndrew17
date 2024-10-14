@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework import status,generics
-from apps.Access.api.serializers import UsuarioSerializers,RestablecerPasswordSerializers
-from apps.Access.models import Usuario,Empleado
+from apps.Access.api.serializers import UsuarioSerializers,SolicitudRestablecerPassSerializers,RestablecerPasswordSerializers
+from apps.Access.models import Usuario
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from rest_framework.authentication import TokenAuthentication
 from ...Seguridad.Permisos import RolePermission
 from apps.Seguridad.Permisos import RolePermission
@@ -60,18 +63,42 @@ class login(APIView):
         else:
             return Response({'error' :'Usuario inactivo. Contactar con el administrador de SARA'}, status=status.HTTP_403_FORBIDDEN)
 
-
-class RestablecerPassword(generics.GenericAPIView):
-    serializer_class = RestablecerPasswordSerializers
+#Se realiza el envio de la dirrecion para restablecer contraseña
+class SolicitudRestablecerPass(generics.GenericAPIView):
+    serializer_class = SolicitudRestablecerPassSerializers
 
     def post(self,request):
         serializer = self.serializer_class(data= request.data)
         if serializer.is_valid():
-            correo_empleado= Empleado.objects.filter(correo=correo_empleado).exists()
-            if correo_empleado:
-                pass
+            try:
+                correo = serializer.validated_data['correo']
+                usuario = serializer.validated_data['usuario']
 
+                token_generator = PasswordResetTokenGenerator()
+                token = token_generator.make_token(usuario)
+                uid = urlsafe_base64_encode(force_bytes(usuario.pk))
+                reset_link = f"http://127.0.0.1:8000/access/restablecerpassword/{uid}/{token}/"
+
+                send_mail('Restablecer Contarseña SARA',f'link de restablecimineto  {reset_link}',None, [correo])
+                return Response({'message':'Se realizo el envio correo para el restablecimiento de contarseña'}, status=status.HTTP_200_OK)
+            except Exception as e:
+                error = str(e)
+                return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-        
+#Serealiza el cambio de contarseña 
+class ContraseñaRestablecida(APIView):
+    serializer_class =RestablecerPasswordSerializers
+    
+    def post(self, request, uidb64, token):
+        print("UIDB64:", uidb64)
+        print("token: ",token)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            try:
+                serializer.save(uid=uidb64, token=token)
+                return Response({'msg': 'Contraseña restablecida correctamente'}, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

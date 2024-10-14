@@ -1,7 +1,7 @@
 from django.urls import path
 from apps.Access.models import Convenio,Sucursal,Empleado,Usuario
 from apps.Access.api.serializers import ConvenioSerializers, SucursalSeralizers,EmpleadoSerialzers,UsuarioSerializers
-from apps.Access.api.views import CreateUser,login
+from apps.Access.api.views import CreateUser,login,SolicitudRestablecerPass,ContraseñaRestablecida
 from apps.Seguridad.CRUD import GetGeneral,PUT_DELETE_General,PostGeneral
 
 urlpatterns=[
@@ -23,5 +23,7 @@ urlpatterns=[
 
     path('login/',login.as_view()),
 
+    path('solicitarpassword/', SolicitudRestablecerPass.as_view()),
+    path('restablecerpassword/<uidb64>/<token>',ContraseñaRestablecida.as_view())
   
 ]

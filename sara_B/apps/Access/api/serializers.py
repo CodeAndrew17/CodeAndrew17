@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from apps.Access.models import Convenio,Sucursal,Empleado,Usuario
 from .Validaciones import logitud_minima,validate_positive,validate_number,validate_text
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from rest_framework.exceptions import ValidationError
+
+
 
 class ConvenioSerializers(serializers.ModelSerializer):
     class Meta:
@@ -35,10 +40,47 @@ class EmpleadoSerialzers(serializers.ModelSerializer):
         model=Empleado
         fields='__all__'
 
-
-class RestablecerPasswordSerializers(serializers.Serializer):
+class SolicitudRestablecerPassSerializers(serializers.Serializer):
+    usuario = serializers.CharField(max_length=100)
     correo = serializers.EmailField(max_length=100)
-    class Meta:
-        fields= ['correo']
 
+    class Meta:
+        fields = ['correo', 'usuario']
+
+    def validate_usuario(self, value):
+        try:
+            # Busca el usuario en la base de datos
+            user = Usuario.objects.get(usuario=value)
+            return user
+        except Usuario.DoesNotExist:
+            # Lanza un error si no encuentra el usuario
+            raise ValidationError("Usuario no existente")
+
+    def validate_correo(self, value):
+        if not Empleado.objects.filter(correo=value).exists():
+            # Lanza un error si el correo no coincide
+            raise ValidationError("Correo erróneo")
+        return value
         
+class RestablecerPasswordSerializers(serializers.Serializer):
+    password = serializers.CharField(write_only=True, min_length=10)
+    password_conf = serializers.CharField(write_only=True, min_length=10)
+
+    def validate(self, data):
+        if data['password'] != data['password_conf']:
+            raise ValidationError("Las contraseñas no coinciden.")
+        return data
+
+    def save(self, uid, token):
+        try:
+            user_id = urlsafe_base64_decode (uid).decode()  
+            user = Usuario.objects.get(pk=user_id)
+        except (ValueError, TypeError, OverflowError, Usuario.DoesNotExist):
+            raise ValidationError("El enlace no es válido.")
+        
+        token_generator = PasswordResetTokenGenerator()
+        if not token_generator.check_token(user, token):
+            raise ValidationError("El token no es válido o ha expirado.")
+    
+        user.set_password(self.validated_data['password'])
+        user.save()
