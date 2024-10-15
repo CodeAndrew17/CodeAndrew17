@@ -13,6 +13,9 @@ from rest_framework.authentication import TokenAuthentication
 from ...Seguridad.Permisos import RolePermission
 from apps.Seguridad.Permisos import RolePermission
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 
 #Clase para realiza la Creacion del usuarios con la asignacion de toekn para verificaicon      
@@ -35,8 +38,15 @@ class CreateUser(APIView):
         if serializers.is_valid():
             objet = serializers.save()
             if isinstance(objet, Usuario):
-                token, created = Token.objects.get_or_create(user=objet)
-                return Response({'token': token.key, **serializers.data}, status=status.HTTP_201_CREATED)
+                #token, created = Token.objects.get_or_create(user=objet)
+                #return Response({'token': token.key, **serializers.data}, status=status.HTTP_201_CREATED)
+
+                refresh=RefreshToken.for_user(user=objet)
+                return Response({
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    **serializers.data
+                }, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -57,9 +67,18 @@ class login(APIView):
         if user.estado == 'AC':
             if not user.Verificar_contraseña(request.data['password']):
                 return Response({'error':'Contraseña Erronea'}, status=status.HTTP_401_UNAUTHORIZED)
-            token, created= Token.objects.get_or_create(user=user)
-            serialiizers= UsuarioSerializers(instance=user)
-            return Response({'token':token.key,'usuario':serialiizers.data['usuario']}, status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)  # Genera el token de refresco
+            access_token = refresh.access_token    # Obtiene el token de acceso
+
+            serializers = UsuarioSerializers(instance=user)
+            
+
+            return Response({
+                'access': str(access_token),      # Token de acceso (JWT)
+                'refresh': str(refresh),          # Token de refresco (JWT)
+                'usuario': serializers.data['usuario']  
+            }, status=status.HTTP_200_OK)
+        
         else:
             return Response({'error' :'Usuario inactivo. Contactar con el administrador de SARA'}, status=status.HTTP_403_FORBIDDEN)
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.css'; // estilos
 import {useForm} from 'react-hook-form'
 import {Datosinicio} from '../api/login_api'
@@ -16,13 +16,30 @@ export function Login(){
     //Permite hacer el redirecionamiento de la pagina sin recargas necesarias 
     const navigate = useNavigate();
 
+    const [message, setMessage] = useState()
+
 
     const onSubmit = handleSubmit( async data => {
         
         console.log(data)
-        const rest= await Datosinicio(data);
-        console.log(rest);
-        navigate("/inicio")
+        try{
+            const rest= await Datosinicio(data);
+            console.log(rest);
+            if (rest.status === 200){
+                setMessage("inicion")
+                navigate('/inicio')
+            }
+            else if(rest.status === 403){
+                setMessage("usuario inactivo")
+            }
+            else{
+                setMessage("usuarios incorrectos intentelo de Nuevo")
+            }
+         }catch (errors){
+            console.log(errors)
+            setMessage("conexion fallida con el Servidor")
+
+        }
 
     });
 
@@ -55,8 +72,12 @@ export function Login(){
                         </div>
 
                         </div>
-                        <button type="submit" style={{ fontWeight: 'bold' }}>Iniciar Sesión</button>
+                        <button type="submit" style={{ fontWeight: 'bold' }}>
+                          
+                            Iniciar Sesión
+                        </button>
                     </form>
+                    {message && <p className="message">{message}</p>}
                 </div>
 
                 {/* seccion derecha /(poner imagen o algo) */}

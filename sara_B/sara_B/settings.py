@@ -154,3 +154,22 @@ EMAIL_HOST_PASSWORD = 's e r o j b e q p w i k o b a q '
 
 #Servidores Permitodos para hacer Peticiones
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+
+#configuracion del Vida del token
+
+from datetime import timedelta
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Tiempo de vida del token de acceso
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Tiempo de vida del token de refresco
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': 'tu_clave_secreta_aqui',  # Asegúrate de cambiar esto
+}
