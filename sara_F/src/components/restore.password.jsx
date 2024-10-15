@@ -33,6 +33,7 @@ export function RestorePassword(){
                 <input type="text" id="username" placeholder="Ingrese su usuario" {...register("usuario",{required:true})} />
                 <label htmlFor="email">Correo electronico</label>
                 <input type="text"  placeholder='Ingrese Correo'{...register("correo",{required:true})} />
+                <button type="submit" style={{ fontWeight: 'bold' }}>Enviar correo</button>
                   
 
 
