@@ -15,18 +15,30 @@ export function RestorePassword(){
     
     //Permite hacer el redirecionamiento de la pagina sin recargas necesarias 
     const navigate = useNavigate();
-    const notify = () => {
-        toast.success("Notificación Básica",{position:'top-center'})
-            
-    };
-    const onSubmit = handleSubmit( async data => {
-        
-        console.log(data)
-        const rest= await RecoverPassword(data);
-        console.log(rest);
-        navigate("/inicio")
 
+    const onSubmit = handleSubmit(async (data) => {
+        console.log(data);
+    
+        try {
+            const rest = await RecoverPassword(data);
+            console.log(rest);
+    
+            // Redirigir si la respuesta es exitosa
+            if (rest.status === 200) {
+
+                toast.success("Bienvenido a SARA", { position: "top-center" });
+                setTimeout(() =>{
+                    navigate("/");
+                },5000)
+                
+            } else {
+                toast.error(rest.request, { position: "top-center" });
+            }
+        } catch (error) {
+            toast.error("Error al recuperar la contraseña", { position: "top-center" });
+        }
     });
+
     const Volver = ()=>{
         navigate("/")
     }
@@ -35,11 +47,16 @@ export function RestorePassword(){
         <div className='contaner-restore'>
             <div className='request-password'>
                 <form onSubmit={onSubmit}>
-                    <div className='title'>
+                    
+                    <header>
                         <h1>Recuperar Contraseña</h1>
-                    </div>
+                    </header>
+                    <article>
+                        <p>Indicar usuarios para el cambio de contraseña</p>
+                        
+                    </article>
 
-                    <div className='input-group'>
+                    <div className='input'>
 
                         <label htmlFor="username"><b>Usuario</b></label>
                         <input type="text" id="username" placeholder="Ingrese su usuario" {...register("usuario",{required:true})} />
@@ -50,7 +67,7 @@ export function RestorePassword(){
                    
                     <div className='button-group'>
 
-                        <button type="submit" style={{ fontWeight: 'bold' }} onClick={notify}
+                        <button type="submit" style={{ fontWeight: 'bold' }} onClick={onSubmit}
                         >Enviar correo</button>
 
                         <button type='submit'onClick={Volver}

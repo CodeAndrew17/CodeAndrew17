@@ -54,7 +54,7 @@ class SolicitudRestablecerPassSerializers(serializers.Serializer):
             return user
         except Usuario.DoesNotExist:
             # Lanza un error si no encuentra el usuario
-            raise ValidationError("Usuario no existente")
+            raise ValidationError("Usuario no existente",)
 
     def validate_correo(self, value):
         if not Empleado.objects.filter(correo=value).exists():

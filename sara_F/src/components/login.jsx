@@ -3,6 +3,8 @@ import './Login.css'; // estilos
 import {useForm} from 'react-hook-form'
 import {Datosinicio} from '../api/login_api'
 import {useNavigate,Link} from 'react-router-dom'
+import logo from './images/logo.png'
+import { toast } from 'react-toastify';
 
 export function Login(){
     /*
@@ -19,29 +21,29 @@ export function Login(){
     const [message, setMessage] = useState()
 
 
-    const onSubmit = handleSubmit( async data => {
-        
-        console.log(data)
-        try{
-            const rest= await Datosinicio(data);
-            console.log(rest);
-            if (rest.status === 200){
-                setMessage("inicion")
-                navigate('/inicio')
-            }
-            else if(rest.status === 403){
-                setMessage("usuario inactivo")
-            }
-            else{
-                setMessage("usuarios incorrectos intentelo de Nuevo")
-            }
-         }catch (errors){
-            console.log(errors)
-            setMessage("conexion fallida con el Servidor")
+    const onSubmit = handleSubmit(async (data) => {
+        console.log(data);
+       
+        const rest = await Datosinicio(data);  
+        console.log(rest);
+    
+        if (rest.status === 200) {
 
-        }
+                toast.success("Bienvenido a SARA", { position: "top-center" });
+                setTimeout(() =>{
+                    navigate("/");
+                },5000)
+
+        } 
+        else if (rest.status === 401) {
+            toast.success("Usuario inactivo");
+            } 
+        else{
+            setMessage("Usuario o contraseña incorrectos, inténtelo de nuevo");
+            }
 
     });
+    
 
     return (
         <div className="login-container">
@@ -51,7 +53,7 @@ export function Login(){
                 <div className="left-section">
                    
                 <div className="logo-container">
-                    <img src="https://cdn.discordapp.com/attachments/1294805456174452746/1294805644624531497/yaxd.png?ex=670c593a&is=670b07ba&hm=ac2dc55f59f61c7f9a250ae550d9d411a323a43b6e6f097da104b2897cfa4e83&" alt="Logo" className="logo" />
+                    <img src={logo} alt="Logo" className="logo" />
                 </div>
 
                 <h2 className="gradient-text">Bienvenido!</h2>
@@ -72,7 +74,9 @@ export function Login(){
                         </div>
 
                         </div>
-                        <button type="submit" style={{ fontWeight: 'bold' }}>
+                        <button type="submit" style={{ fontWeight: 'bold' }}
+                        onClick={onSubmit}
+                        >
                           
                             Iniciar Sesión
                         </button>

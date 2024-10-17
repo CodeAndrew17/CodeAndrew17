@@ -45,43 +45,57 @@ class CreateUser(APIView):
                 return Response({
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
-                    **serializers.data
-                }, status=status.HTTP_201_CREATED)
+                    'usuario':serializers.data
+                    
+                },status=status.HTTP_201_CREATED)
             else:
                 return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # clase que hace la verificacion de Credenciales y trae el token del usuario correspodiente 
-class login(APIView):
 
-    def post(self,request):
+class Login(APIView):
 
+    def post(self, request):
         usuario = request.data.get('usuario')
         password = request.data.get('password')
 
         if not usuario or not password:
-            return Response({'error':'usuario y contarseña Requeridos'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        user=get_object_or_404(Usuario,usuario=request.data['usuario'])
-        
-        if user.estado == 'AC':
-            if not user.Verificar_contraseña(request.data['password']):
-                return Response({'error':'Contraseña Erronea'}, status=status.HTTP_401_UNAUTHORIZED)
-            refresh = RefreshToken.for_user(user)  # Genera el token de refresco
-            access_token = refresh.access_token    # Obtiene el token de acceso
+            return Response({'error': 'Usuario y contraseña son requeridos'}, status=status.HTTP_400_BAD_REQUEST)
 
-            serializers = UsuarioSerializers(instance=user)
-            
+        try:
+            # Buscar al usuario
+            user = get_object_or_404(Usuario, usuario=request.data['usuario'])
 
-            return Response({
-                'access': str(access_token),      # Token de acceso (JWT)
-                'refresh': str(refresh),          # Token de refresco (JWT)
-                'usuario': serializers.data['usuario']  
-            }, status=status.HTTP_200_OK)
+            # Verificar si el usuario está activo
+            if user.estado == 'AC':
+                # Verificar la contraseña
+                if not user.Verificar_contraseña(request.data['password']):
+                    return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_401_UNAUTHORIZED)
+
+                # Generar los tokens (JWT)
+                refresh = RefreshToken.for_user(user)
+                access_token = refresh.access_token
+
+                # Serializar los datos del usuario
+                serializers = UsuarioSerializers(instance=user)
+
+                return Response({
+                    'access': str(access_token),
+                    'refresh': str(refresh),
+                    'usuario': serializers.data['usuario']
+                }, status=status.HTTP_200_OK)
+
+            else:
+                return Response({'error': 'Usuario inactivo. Contacte al administrador de SARA'}, status=status.HTTP_403_FORBIDDEN)
+
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
-        else:
-            return Response({'error' :'Usuario inactivo. Contactar con el administrador de SARA'}, status=status.HTTP_403_FORBIDDEN)
-
 #Se realiza el envio de la dirrecion para restablecer contraseña
 class SolicitudRestablecerPass(generics.GenericAPIView):
     serializer_class = SolicitudRestablecerPassSerializers
