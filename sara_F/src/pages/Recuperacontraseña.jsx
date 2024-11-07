@@ -1,4 +1,4 @@
-import RestorePassword from '../components/restore.password'
+import RestorePassword from '../components/restore.passwordSC'
 
 export function Recuperacontraseña() {
     return (

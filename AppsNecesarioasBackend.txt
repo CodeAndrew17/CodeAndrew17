@@ -1,8 +1,8 @@
 #Permite la comunicación entres Servidores
 pip install django-cors-headers
 
-#permite la creación de Apis HTTP
 pip install Django Rest Framwork
+#permite la creación de Apis HTTP
 
 asgiref==3.8.1  # Proporciona utilidades para trabajar con ASGI (Asynchronous Server Gateway Interface)
 Django==4.2  # Framework web para construir aplicaciones web con Python
