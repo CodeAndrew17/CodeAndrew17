@@ -14,16 +14,35 @@
 <!--![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)-->
 
 
-<div>
-  <img src="imgs/img1.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img2.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img3.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img4.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img5.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img6.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img7.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img8.png" alt="LinkedIn Badge" style="width: 120px;"/>
-  <img src="imgs/img9.png" alt="LinkedIn Badge" style="width: 120px;"/>
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+  <div style="margin: 5px;">
+    <img src="imgs/img1.png" alt="Badge 1" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img2.png" alt="Badge 2" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img3.png" alt="Badge 3" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img4.png" alt="Badge 4" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img5.png" alt="Badge 5" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img6.png" alt="Badge 6" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img7.png" alt="Badge 7" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img8.png" alt="Badge 8" style="width: 120px;"/>
+  </div>
+  <div style="margin: 5px;">
+    <img src="imgs/img9.png" alt="Badge 9" style="width: 120px;"/>
+  </div>
 </div>
+
 
 
