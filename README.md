@@ -1,6 +1,6 @@
 # <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2J0OXlhemt5amRneXhrenR4c2l6ZnNlNzV2cDl0NTQ0enBjMDhvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qgQUggAC3Pfv687qPC/giphy.webp" width="120" style="vertical-align: middle;"/> Bienvenid@ a mi GitHub
 
-<p align="center">Mi nombre es Andres Felipe, tengo 17 años y soy un joven Desarrollador de Software. Me apasiona la tecnología y estoy constantemente aprendiendo para mejorar mis habilidades.</p>
+<h5 align="center">Mi nombre es Andres Felipe, tengo 17 años y soy un joven Desarrollador de Software. Me apasiona la tecnología y estoy constantemente aprendiendo para mejorar mis habilidades.</h5>
 
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-malaver-0b6561332/)
 
