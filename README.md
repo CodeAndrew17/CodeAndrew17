@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2J0OXlhemt5amRneXhrenR4c2l6ZnNlNzV2cDl0NTQ0enBjMDhvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qgQUggAC3Pfv687qPC/giphy.webp" width="120" style="vertical-align: middle;"/>
+  <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2J0OXlhemt5amRneXhrenR4c2l6ZnNlNzV2cDl0NTQ0enBjMDhvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qgQUggAC3Pfv687qPC/giphy.webp" width="150" style="vertical-align: middle;"/>
   <h1>Bienvenid@ a mi GitHub</h1>
 </div>
 
