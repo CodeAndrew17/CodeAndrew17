@@ -30,8 +30,8 @@
 <table align="center">
   <tr>
     <td><img src="imgs/im1.png" alt="CSS" style="width: 140px; height: auto;"/></td>
-    <td><img src="imgs/im2.png" alt="HTML" style="width: 140px; height: auto;"/></td>
-    <td><img src="imgs/im3.png" alt="Workbench" style="width: 140px; height: auto;"/></td>
+    <td><img src="imgs/im3.png" alt="HTML" style="width: 140px; height: auto;"/></td>
+    <td><img src="imgs/im2.png" alt="Workbench" style="width: 140px; height: auto;"/></td>
     <td><img src="imgs/im4.png" alt="Django" style="width: 140px; height: auto;"/></td>
     <td><img src="imgs/im5.png" alt="React" style="width: 140px; height: auto;"/></td>
   </tr>
