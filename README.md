@@ -1,11 +1,11 @@
 <div align="center">
   <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2J0OXlhemt5amRneXhrenR4c2l6ZnNlNzV2cDl0NTQ0enBjMDhvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qgQUggAC3Pfv687qPC/giphy.webp" width="170" style="vertical-align: middle;"/>
-  <h1>Welcome to my GitHub profile</h1>
+  <h1>Welcome to my GitHub profile 👋🏻</h1>
 </div>
 
-<p align="center">
+<h4 align="center">
   Hi! My name is Andres Felipe, I'm a 17-year-old software developer passionate about technology and constantly learning to improve my skills.
-</p>
+</h4>
 
 
 
