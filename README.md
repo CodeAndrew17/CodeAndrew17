@@ -6,13 +6,15 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+
 <center><p style="font-family: 'Montserrat', sans-serif;">
   Mi nombre es Andres Felipe, tengo 17 años y soy un joven Desarrollador de Software. Me apasiona la tecnología y estoy constantemente aprendiendo para mejorar mis habilidades.
 </p>
 
 
 
-[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-malaver-0b6561332/) [![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:becerrafelipe8b@gmail.com)
+<!--[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-malaver-0b6561332/) [![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:becerrafelipe8b@gmail.com)-->
 
 <img src="imgs/link.png" alt="Badge 1" style="width: 140px; height: auto;"/>
 
