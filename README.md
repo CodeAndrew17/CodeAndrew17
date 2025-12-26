@@ -35,7 +35,7 @@
 
 ###  GitHub Stats
 <div align="center">
-  <img src="https://github-readme-stats-ten-brown-32.vercel.app/api?username=CodeAndrew17&show_icons=true&theme=radical&cache_bust=1"/>
+  <img src="https://github-readme-stats-ten-brown-32.vercel.app/api?username=CodeAndrew17&show_icons=true&count_private=true&include_all_commits=true&theme=tokyonight&cache_bust=1"/>
   <img src="https://github-readme-stats-ten-brown-32.vercel.app/api/top-langs/?username=CodeAndrew17&layout=compact&theme=radical&cache_bust=2"/>
 </div>
 
