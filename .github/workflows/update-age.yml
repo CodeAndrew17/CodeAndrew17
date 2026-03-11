@@ -1,0 +1,32 @@
+name: Update Age in README
+
+on:
+  schedule:
+    - cron: '0 0 2 3 *'   # cada 2 de marzo a medianoche UTC
+  workflow_dispatch:       # también puedes lanzarlo manualmente
+
+jobs:
+  update-age:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Update age in README
+        run: |
+          # Fecha de nacimiento: 2007-03-02
+          BIRTHDATE="2007-03-02"
+          TODAY=$(date +%Y-%m-%d)
+          AGE=$(( ($(date -d "$TODAY" +%Y) - $(date -d "$BIRTHDATE" +%Y)) - \
+                  ( ($(date -d "$TODAY" +%m%d) < $(date -d "$BIRTHDATE" +%m%d)) ? 1 : 0 ) ))
+
+          # Reemplazar la edad en el README
+          sed -i "s/[0-9]\+-year-old/${AGE}-year-old/" README.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add README.md
+          git commit -m "Update age to $AGE"
+          git push
