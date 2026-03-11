@@ -5,7 +5,7 @@
 
 <h4 align="center">
   Hi! My name is Andres Felipe 👨🏻‍💻  
-  I'm an 18-year-old software developer passionate about building web applications and exploring new technologies.  
+  I'm an 12-year-old software developer passionate about building web applications and exploring new technologies.  
   Currently focused on learning modern frameworks and improving my backend skills.
 </h4>
 
