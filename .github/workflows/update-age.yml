@@ -5,12 +5,15 @@ on:
     - cron: '0 0 2 3 *'   # cada 2 de marzo a medianoche UTC
   workflow_dispatch:       # también puedes lanzarlo manualmente
 
+permissions: 
+  contents: write
+
 jobs:
   update-age:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Update age in README
         run: |
