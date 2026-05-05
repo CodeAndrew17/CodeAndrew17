@@ -42,8 +42,8 @@
 ---
 
 ###  Featured Projects
-- [S.A.R.A Project](https://github.com/andresfbec/S.A.R.A_FRONTEND) – Frontend Web App 
-- [TKD Score App](https://github.com/andresfbec/tkd-score-app) – Aplication Taekwondo Tournament Manager
+- [S.A.R.A Project](https://github.com/andresfbec/sara-frontend-v2) – Car Appraisal Frontend Web App 
+- [TKD Score App](https://github.com/andresfbec/tkd-score-app) – Application Taekwondo Tournament Manager
 
 ---
 
