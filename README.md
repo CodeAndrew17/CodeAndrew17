@@ -42,8 +42,8 @@
 ---
 
 ###  Featured Projects
-- [S.A.R.A Project](https://github.com/CodeAndrew17/S.A.R.A_FRONTEND) – Frontend Web App 
-- [Personal Web App](https://github.com/CodeAndrew17/SATORI) – Personal web app 
+- [S.A.R.A Project](https://github.com/andresfbec/S.A.R.A_FRONTEND) – Frontend Web App 
+- [TKD Score App](https://github.com/andresfbec/tkd-score-app) – Aplication Taekwondo Tournament Manager
 
 ---
 
